@@ -6,6 +6,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { Scissors } from "lucide-react";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,9 +24,12 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
                     {/* Logo */}
-                    <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="text-2xl font-bold font-display text-royal-blue">
-                            Tanwar Tailor
+                    <div className="flex items-center justify-center h-20">
+                        <Link href="/" className="flex items-center gap-2 font-playfair">
+                            <Scissors className="h-6 w-6 text-royal-blue" />
+                            <h1 className="text-xl font-bold tracking-wider text-royal-blue">
+                                Tanwar <span className="text-[#c5a059]">Tailor</span>
+                            </h1>
                         </Link>
                     </div>
 

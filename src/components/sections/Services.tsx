@@ -47,7 +47,7 @@ const Services = () => {
                     <button
                         onClick={() => setActiveTab("gents")}
                         className={cn(
-                            "px-8 py-3 rounded-full text-sm font-medium transition-all duration-300",
+                            "md:px-8 md:py-3 px-6 py-2 rounded-full text-sm font-medium transition-all duration-300",
                             activeTab === "gents"
                                 ? "bg-royal-blue text-white shadow-md"
                                 : "text-gray-500 hover:text-royal-blue"
@@ -58,7 +58,7 @@ const Services = () => {
                     <button
                         onClick={() => setActiveTab("ladies")}
                         className={cn(
-                            "px-8 py-3 rounded-full text-sm font-medium transition-all duration-300",
+                            "md:px-8 md:py-3 px-6 py-2 rounded-full text-sm font-medium transition-all duration-300",
                             activeTab === "ladies"
                                 ? "bg-royal-blue text-white shadow-md"
                                 : "text-gray-500 hover:text-royal-blue"

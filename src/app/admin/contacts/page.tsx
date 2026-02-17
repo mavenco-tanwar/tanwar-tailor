@@ -113,7 +113,7 @@ export default function ContactsPage() {
                             placeholder="Search by name or email..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c5a059] focus:border-transparent w-full sm:w-64"
+                            className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c5a059] focus:border-transparent w-full sm:w-64 text-[#1a1a2e]"
                         />
                     </div>
 
@@ -122,7 +122,7 @@ export default function ContactsPage() {
                         <select
                             value={filterStatus}
                             onChange={(e) => setFilterStatus(e.target.value)}
-                            className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c5a059] focus:border-transparent appearance-none bg-white w-full sm:w-40"
+                            className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#c5a059] focus:border-transparent appearance-none bg-white w-full sm:w-40 text-[#1a1a2e]"
                         >
                             <option value="all">All Status</option>
                             <option value="unread">Unread</option>
@@ -176,8 +176,8 @@ export default function ContactsPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${contact.isRead
-                                                    ? 'bg-green-100 text-green-800'
-                                                    : 'bg-yellow-100 text-yellow-800'
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-yellow-100 text-yellow-800'
                                                 }`}>
                                                 {contact.isRead ? 'Read' : 'Unread'}
                                             </span>
@@ -238,8 +238,8 @@ export default function ContactsPage() {
                                             key={idx}
                                             onClick={() => paginate(idx + 1)}
                                             className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === idx + 1
-                                                    ? 'z-10 bg-[#c5a059] border-[#c5a059] text-white'
-                                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                                                ? 'z-10 bg-[#c5a059] border-[#c5a059] text-white'
+                                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
                                                 }`}
                                         >
                                             {idx + 1}

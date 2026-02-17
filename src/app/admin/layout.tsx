@@ -28,10 +28,12 @@ export default function AdminLayout({
         { name: "Contacts", href: "/admin/contacts", icon: Users },
     ];
 
+    const isLoginPage = pathname === "/admin/login";
+
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Mobile Sidebar Overlay */}
-            {isSidebarOpen && (
+            {!isLoginPage && isSidebarOpen && (
                 <div
                     className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
                     onClick={() => setIsSidebarOpen(false)}
@@ -39,58 +41,69 @@ export default function AdminLayout({
             )}
 
             {/* Sidebar */}
-            <aside
-                className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#1a1a2e] text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
-            >
-                <div className="flex items-center justify-center h-20 bg-[#2a2a4e]">
-                    <Link href="/" className="flex items-center gap-2 font-playfair">
-                        <Scissors className="h-6 w-6 text-[#c5a059]" />
-                        <h1 className="text-xl font-bold tracking-wider">
-                            Tanwar <span className="text-[#c5a059]">Tailor</span>
-                        </h1>
-                    </Link>
-                </div>
+            {!isLoginPage && (
+                <aside
+                    className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#1a1a2e] text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                        }`}
+                >
+                    <div className="flex items-center justify-center h-20 bg-[#2a2a4e]">
+                        <Link href="/" className="flex items-center gap-2 font-playfair">
+                            <Scissors className="h-6 w-6 text-[#c5a059]" />
+                            <h1 className="text-xl font-bold tracking-wider">
+                                Tanwar <span className="text-[#c5a059]">Tailor</span>
+                            </h1>
+                        </Link>
+                    </div>
 
-                <nav className="mt-8 px-4 space-y-2">
-                    {navItems.map((item) => {
-                        const isActive = pathname.startsWith(item.href);
-                        return (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${isActive
+                    <nav className="mt-8 px-4 space-y-2">
+                        {navItems.map((item) => {
+                            const isActive = pathname.startsWith(item.href);
+                            return (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${isActive
                                         ? "bg-[#c5a059] text-white"
                                         : "text-gray-400 hover:bg-[#2a2a4e] hover:text-white"
-                                    }`}
-                                onClick={() => setIsSidebarOpen(false)}
-                            >
-                                <item.icon className="h-5 w-5 mr-3" />
-                                {item.name}
-                            </Link>
-                        );
-                    })}
+                                        }`}
+                                    onClick={() => setIsSidebarOpen(false)}
+                                >
+                                    <item.icon className="h-5 w-5 mr-3" />
+                                    {item.name}
+                                </Link>
+                            );
+                        })}
 
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg text-red-400 hover:bg-[#2a2a4e] hover:text-red-300 transition-colors duration-200 mt-8"
-                    >
-                        <LogOut className="h-5 w-5 mr-3" />
-                        Logout
-                    </button>
-                </nav>
-            </aside>
+                        <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg text-red-400 hover:bg-[#2a2a4e] hover:text-red-300 transition-colors duration-200 mt-8 cursor-pointer"
+                        >
+                            <LogOut className="h-5 w-5 mr-3" />
+                            Logout
+                        </button>
+                    </nav>
+                </aside>
+            )}
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Top Header */}
                 <header className="flex items-center justify-between h-20 bg-white px-6 shadow-sm border-b">
-                    <button
-                        className="text-gray-500 focus:outline-none lg:hidden"
-                        onClick={() => setIsSidebarOpen(true)}
-                    >
-                        <Menu className="h-6 w-6" />
-                    </button>
+                    {!isLoginPage ? (
+                        <button
+                            className="text-gray-500 focus:outline-none lg:hidden"
+                            onClick={() => setIsSidebarOpen(true)}
+                        >
+                            <Menu className="h-6 w-6" />
+                        </button>
+                    ) : (
+                        <Link href="/" className="flex items-center gap-2 font-playfair">
+                            <Scissors className="h-6 w-6 text-[#c5a059]" />
+                            <h2 className="text-lg font-bold tracking-wider text-[#1a1a2e]">
+                                Tanwar <span className="text-[#c5a059]">Tailor</span>
+                            </h2>
+                        </Link>
+                    )}
 
                     <div className="flex items-center ml-auto">
                         <span className="text-sm text-gray-600 mr-2">Admin Panel</span>
