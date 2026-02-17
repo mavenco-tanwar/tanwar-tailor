@@ -25,7 +25,9 @@ export default function AdminLogin() {
             });
 
             if (res.ok) {
-                router.push("/admin/dashboard");
+                // Use window.location.href instead of router.push to ensure 
+                // the middleware and session state are fully reloaded
+                window.location.href = "/admin/dashboard";
             } else {
                 const data = await res.json();
                 setError(data.error || "Login failed");
