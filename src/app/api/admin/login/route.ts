@@ -44,7 +44,16 @@ export async function POST(req: NextRequest) {
         }
 
         // Generate JWT
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            console.error("JWT_SECRET is not defined in environment variables");
+            return NextResponse.json(
+                { error: "Server configuration error" },
+                { status: 500 }
+            );
+        }
+
+        const secret = new TextEncoder().encode(jwtSecret);
         const token = await new SignJWT({ userId: user._id, email: user.email })
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()
@@ -59,7 +68,7 @@ export async function POST(req: NextRequest) {
             secure: process.env.NODE_ENV === "production",
             maxAge: 60 * 60 * 24, // 1 day
             path: "/",
-            sameSite: "strict",
+            sameSite: "lax", // Changed from "strict" to "lax" for better compatibility
         });
 
         return NextResponse.json({ message: "Login successful" }, { status: 200 });
