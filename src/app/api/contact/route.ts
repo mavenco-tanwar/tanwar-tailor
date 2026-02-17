@@ -1,51 +1,65 @@
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "@/lib/db";
+import Contact from "@/models/Contact";
+import nodemailer from "nodemailer";
 
-import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-
-// Initialize Nodemailer transporter
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-});
-
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const { name, phone, service, message } = await request.json();
+        await connectDB();
 
-        // 1. Send Email to Tailor
+        const { name, email, phone, message } = await req.json();
+
+        if (!name || !email || !phone || !message) {
+            return NextResponse.json(
+                { error: "All fields are required" },
+                { status: 400 }
+            );
+        }
+
+        const newContact = await Contact.create({
+            name,
+            email,
+            phone,
+            message,
+        });
+
+        // Email Notification Logic (Bonus)
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: 'tailortanwar@gmail.com',
+            to: process.env.EMAIL_USER, // Send to admin
             subject: `New Contact Query from ${name}`,
-            text: `
-        Name: ${name}
-        Phone: ${phone}
-        Service: ${service}
-        Message: ${message}
-      `,
             html: `
-        <h3>New Contact Query</h3>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Service:</strong> ${service}</p>
-        <p><strong>Message:</strong> ${message}</p>
-      `,
+          <h2>New Contact Query</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message}</p>
+        `,
         };
 
-        await transporter.sendMail(mailOptions);
+        // Send email asynchronously without blocking the response
+        transporter.sendMail(mailOptions).catch((err) => {
+            console.error("Failed to send email notification:", err);
+        });
 
-        return NextResponse.json({ success: true, message: 'Message sent successfully!' });
-
-    } catch (error) {
-        console.error('Error sending message:', error);
         return NextResponse.json(
-            { success: false, message: 'Failed to send message.' },
+            { message: "Message sent successfully", contact: newContact },
+            { status: 201 }
+        );
+    } catch (error) {
+        console.error("Error submitting contact form:", error);
+        return NextResponse.json(
+            { error: "Internal Server Error" },
             { status: 500 }
         );
     }
 }
-
-

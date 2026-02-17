@@ -34,7 +34,7 @@ const Hero = () => {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Button variant="primary" size="lg" className="w-full sm:w-auto text-lg"
-                            onClick={() => window.location.href = '#contact'}>
+                            onClick={() => window.location.href = 'contact'}>
                             <Calendar className="mr-2 h-5 w-5" />
                             Book Apppointment
                         </Button>

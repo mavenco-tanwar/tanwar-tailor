@@ -8,8 +8,8 @@ import { Phone, MapPin, Mail, Send } from "lucide-react";
 const Contact = () => {
     const [formData, setFormData] = useState({
         name: "",
+        email: "",
         phone: "",
-        service: "General Inquiry",
         message: "",
     });
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -31,14 +31,13 @@ const Contact = () => {
                 body: JSON.stringify(formData),
             });
 
-            const data = await response.json();
-
-            if (data.success) {
+            if (response.ok) {
                 setStatus("success");
-                setFormData({ name: "", phone: "", service: "General Inquiry", message: "" });
+                setFormData({ name: "", email: "", phone: "", message: "" });
             } else {
+                const data = await response.json();
                 setStatus("error");
-                setErrorMessage(data.message || "Something went wrong.");
+                setErrorMessage(data.error || "Something went wrong.");
             }
         } catch (error) {
             setStatus("error");
@@ -109,17 +108,29 @@ const Contact = () => {
                 <div className="bg-white p-8 rounded-xl shadow-2xl text-gray-800">
                     <h3 className="text-2xl font-bold font-display text-royal-blue mb-6">Send us a Message</h3>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-700">Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue/50"
+                                placeholder="Your Name"
+                            />
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700">Name</label>
+                                <label className="text-sm font-medium text-gray-700">Email</label>
                                 <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
                                     onChange={handleChange}
                                     required
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue/50"
-                                    placeholder="Your Name"
+                                    placeholder="your@email.com"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -131,24 +142,9 @@ const Contact = () => {
                                     onChange={handleChange}
                                     required
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue/50"
-                                    placeholder="Your Phone"
+                                    placeholder="+91-XXX-XXX-XXXX"
                                 />
                             </div>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">Service Interested In</label>
-                            <select
-                                name="service"
-                                value={formData.service}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue/50"
-                            >
-                                <option>General Inquiry</option>
-                                <option>Gents Tailoring</option>
-                                <option>Ladies Tailoring</option>
-                                <option>Bridal/Groom Wear</option>
-                                <option>Alterations</option>
-                            </select>
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">Message</label>
@@ -159,7 +155,7 @@ const Contact = () => {
                                 rows={4}
                                 required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-royal-blue/50"
-                                placeholder="How can we help you?"
+                                placeholder="Tell us about your tailoring needs..."
                             />
                         </div>
                         <Button className="w-full mt-4" size="lg" disabled={status === "loading"}>
