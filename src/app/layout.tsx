@@ -15,6 +15,10 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Tanwar Tailor | Ladies & Gents Alteration Specialist",
   description: "Expert tailoring services in Sikar. Specialists in shirt, pant, suit, bridal dresses, and custom stitching for men and women.",
+  icons: {
+    icon: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
 };
 
 export default function RootLayout({
