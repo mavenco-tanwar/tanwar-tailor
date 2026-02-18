@@ -20,6 +20,7 @@ const updateInvoiceSchema = z.object({
     tax: z.number().optional(),
     discount: z.number().optional(),
     grandTotal: z.number().optional(),
+    paidAmount: z.number().optional(),
     status: z.enum(["Paid", "Unpaid", "Partial"]).optional(),
     dueDate: z.string().transform((str) => new Date(str)).optional(),
 });
@@ -51,7 +52,9 @@ export async function PUT(
         await dbConnect();
         const { id } = await params;
         const body = await req.json();
+        console.log("PUT Invoice Body:", body);
         const validatedData = updateInvoiceSchema.parse(body);
+        console.log("PUT Validated Data:", validatedData);
 
         const updatedInvoice = await Invoice.findByIdAndUpdate(
             id,

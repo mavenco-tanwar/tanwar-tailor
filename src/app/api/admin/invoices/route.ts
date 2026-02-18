@@ -21,6 +21,7 @@ const createInvoiceSchema = z.object({
     tax: z.number().default(0),
     discount: z.number().default(0),
     grandTotal: z.number(),
+    paidAmount: z.number().default(0),
     status: z.enum(["Paid", "Unpaid", "Partial"]).default("Unpaid"),
     dueDate: z.string().transform((str) => new Date(str)),
 });
@@ -70,7 +71,9 @@ export async function POST(req: NextRequest) {
     try {
         await dbConnect();
         const body = await req.json();
+        console.log("POST Invoice Body:", body);
         const validatedData = createInvoiceSchema.parse(body);
+        console.log("POST Validated Data:", validatedData);
 
         // Generate Invoice Number: TT-YYYY-XXX
         const year = new Date().getFullYear();

@@ -32,7 +32,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
 
     const fetchInvoice = async () => {
         try {
-            const res = await fetch(`/api/admin/invoices/${id}`);
+            const res = await fetch(`/api/admin/invoices/${id}`, { cache: "no-store" });
             const data = await res.json();
             if (res.ok) {
                 setInvoice(data);
@@ -53,7 +53,10 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             const res = await fetch(`/api/admin/invoices/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status: "Paid" }),
+                body: JSON.stringify({
+                    status: "Paid",
+                    paidAmount: invoice.grandTotal
+                }),
             });
             if (res.ok) {
                 fetchInvoice();
@@ -89,7 +92,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             ? `${window.location.origin}/invoices/view/${invoice.shareSlug}`
             : null;
 
-        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: ₹${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : `You can collect your order by ${format(new Date(invoice.dueDate), "dd MMM yyyy")}.`}\n\nThank you for choosing Tanwar Tailor!`;
+        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : `You can collect your order by ${format(new Date(invoice.dueDate), "dd MMM yyyy")}.`}\n\nThank you for choosing Tanwar Tailor!`;
 
         const encodedMsg = encodeURIComponent(message);
         window.open(`https://wa.me/${invoice.customerPhone}?text=${encodedMsg}`, "_blank");
@@ -100,7 +103,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             ? `${window.location.origin}/invoices/view/${invoice.shareSlug}`
             : null;
 
-        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: ₹${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : ""}`;
+        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : ""}`;
 
         if (navigator.share && navigator.canShare) {
             try {
@@ -273,8 +276,8 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                                         <tr key={i}>
                                             <td className="py-4 text-sm text-gray-500">{item.description}</td>
                                             <td className="py-4 text-sm text-center text-gray-500">{item.quantity}</td>
-                                            <td className="py-4 text-sm text-right text-gray-500">₹{item.price}</td>
-                                            <td className="py-4 text-sm font-medium text-right text-gray-500">₹{item.total}</td>
+                                            <td className="py-4 text-sm text-right text-gray-500">Rs. {item.price}</td>
+                                            <td className="py-4 text-sm font-medium text-right text-gray-500">Rs. {item.total}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -284,23 +287,31 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                                 <div className="w-full md:w-64 space-y-3">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-gray-500">Subtotal</span>
-                                        <span className="font-medium text-gray-500">₹{invoice.subtotal}</span>
+                                        <span className="font-medium text-gray-500">Rs. {invoice.subtotal}</span>
                                     </div>
                                     {invoice.tax > 0 && (
                                         <div className="flex justify-between text-sm">
                                             <span className="text-gray-500">Tax ({invoice.tax}%)</span>
-                                            <span className="font-medium">₹{((invoice.subtotal * invoice.tax) / 100).toFixed(2)}</span>
+                                            <span className="font-medium">Rs. {((invoice.subtotal * invoice.tax) / 100).toFixed(2)}</span>
                                         </div>
                                     )}
                                     {invoice.discount > 0 && (
                                         <div className="flex justify-between text-sm text-red-500">
                                             <span>Discount ({invoice.discount}%)</span>
-                                            <span className="font-medium">-₹{((invoice.subtotal * invoice.discount) / 100).toFixed(2)}</span>
+                                            <span className="font-medium">-Rs. {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}</span>
                                         </div>
                                     )}
                                     <div className="flex justify-between pt-3 border-t-2 border-gray-900">
-                                        <span className="text-base font-bold text-gray-900">Total</span>
-                                        <span className="text-xl font-bold text-royal-blue">₹{invoice.grandTotal}</span>
+                                        <span className="text-base font-bold text-gray-900">Total Amount</span>
+                                        <span className="text-xl font-bold text-royal-blue">Rs. {invoice.grandTotal}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm pt-2">
+                                        <span className="text-gray-500">Amount Paid</span>
+                                        <span className="font-medium text-green-600">Rs. {invoice.paidAmount || 0}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm pt-1 pb-2 border-b">
+                                        <span className="text-gray-500">Balance Due</span>
+                                        <span className="font-bold text-red-600">Rs. {Math.max(0, invoice.grandTotal - (invoice.paidAmount || 0))}</span>
                                     </div>
                                 </div>
                             </div>

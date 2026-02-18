@@ -17,7 +17,7 @@ export default function EditInvoicePage({ params }: { params: Promise<{ id: stri
 
     const fetchInvoice = async () => {
         try {
-            const res = await fetch(`/api/admin/invoices/${id}`);
+            const res = await fetch(`/api/admin/invoices/${id}`, { cache: "no-store" });
             const data = await res.json();
             if (res.ok) {
                 setInvoice(data);

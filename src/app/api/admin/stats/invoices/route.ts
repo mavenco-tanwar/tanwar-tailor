@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
                 $group: {
                     _id: null,
                     totalInvoices: { $sum: 1 },
-                    totalRevenue: { $sum: "$grandTotal" },
+                    totalRevenue: { $sum: { $ifNull: ["$paidAmount", 0] } },
                     paidInvoices: {
                         $sum: { $cond: [{ $eq: ["$status", "Paid"] }, 1, 0] },
                     },
@@ -23,7 +23,10 @@ export async function GET(req: NextRequest) {
                     },
                     pendingAmount: {
                         $sum: {
-                            $cond: [{ $ne: ["$status", "Paid"] }, "$grandTotal", 0],
+                            $subtract: [
+                                "$grandTotal",
+                                { $ifNull: ["$paidAmount", 0] }
+                            ]
                         },
                     },
                 },

@@ -199,7 +199,7 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                 {/* Customer Section */}
                 <View style={styles.customerSection}>
                     <View style={styles.customerBox}>
-                        <Text style={styles.sectionTitle}>Bill To</Text>
+                        <Text style={styles.sectionTitle}>Customer</Text>
                         <Text style={{ fontSize: 12, fontWeight: "bold", marginBottom: 4 }}>
                             {invoice.customerName}
                         </Text>
@@ -253,8 +253,18 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                             </View>
                         )}
                         <View style={styles.grandTotal}>
-                            <Text style={styles.totalText}>Total</Text>
+                            <Text style={styles.totalText}>Total Amount</Text>
                             <Text style={styles.totalText}>Rs. {invoice.grandTotal}</Text>
+                        </View>
+                        <View style={styles.summaryRow}>
+                            <Text style={styles.summaryLabel}>Amount Paid</Text>
+                            <Text style={styles.summaryValue}>Rs. {invoice.paidAmount || 0}</Text>
+                        </View>
+                        <View style={[styles.summaryRow, { borderTop: 1, borderTopColor: '#eee', marginTop: 4, paddingTop: 4 }]}>
+                            <Text style={[styles.summaryLabel, { fontWeight: 'bold', color: '#1a1a2e' }]}>Balance Due</Text>
+                            <Text style={[styles.summaryValue, { color: '#d93025' }]}>
+                                Rs. {Math.max(0, invoice.grandTotal - (invoice.paidAmount || 0))}
+                            </Text>
                         </View>
                     </View>
                 </View>

@@ -31,6 +31,7 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
         tax: initialData?.tax || 0,
         discount: initialData?.discount || 0,
         grandTotal: initialData?.grandTotal || 0,
+        paidAmount: initialData?.paidAmount || 0,
         status: initialData?.status || "Unpaid",
         dueDate: initialData?.dueDate
             ? new Date(initialData.dueDate).toISOString().split("T")[0]
@@ -49,12 +50,17 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
         const discountAmount = (subtotal * (formData.discount || 0)) / 100;
         const grandTotal = Math.round(subtotal + taxAmount - discountAmount);
 
-        setFormData((prev) => ({
-            ...prev,
-            subtotal,
-            grandTotal,
-        }));
-    }, [formData.items, formData.tax, formData.discount]);
+        setFormData((prev) => {
+            const updates: any = { subtotal, grandTotal };
+            if (prev.status === "Paid") {
+                updates.paidAmount = grandTotal;
+            }
+            return {
+                ...prev,
+                ...updates,
+            };
+        });
+    }, [formData.items, formData.tax, formData.discount, formData.status]);
 
     const handleItemChange = (index: number, field: string, value: string | number) => {
         const newItems = [...formData.items];
@@ -99,10 +105,11 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-700">Name</label>
+                        <label className="text-sm font-medium text-gray-700">Customer Name</label>
                         <input
                             type="text"
                             required
+                            placeholder="Enter customer name"
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] focus:ring-2 focus:ring-royal-blue/20 outline-none transition-all"
                             value={formData.customerName}
                             onChange={(e) =>
@@ -111,10 +118,11 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-700">Phone</label>
+                        <label className="text-sm font-medium text-gray-700">Customer Phone</label>
                         <input
                             type="tel"
                             required
+                            placeholder="Enter customer phone"
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] focus:ring-2 focus:ring-royal-blue/20 outline-none transition-all"
                             value={formData.customerPhone}
                             onChange={(e) =>
@@ -123,9 +131,10 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-sm font-medium text-gray-700">Email (Optional)</label>
+                        <label className="text-sm font-medium text-gray-700">Customer Email (Optional)</label>
                         <input
                             type="email"
+                            placeholder="Enter customer email"
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] focus:ring-2 focus:ring-royal-blue/20 outline-none transition-all"
                             value={formData.customerEmail}
                             onChange={(e) =>
@@ -146,9 +155,10 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                         />
                     </div>
                     <div className="md:col-span-2 space-y-1">
-                        <label className="text-sm font-medium text-gray-700">Address</label>
+                        <label className="text-sm font-medium text-gray-700">Customer Address</label>
                         <textarea
                             rows={2}
+                            placeholder="Enter customer billing address"
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] focus:ring-2 focus:ring-royal-blue/20 outline-none transition-all"
                             value={formData.customerAddress}
                             onChange={(e) =>
@@ -202,6 +212,7 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                                     type="number"
                                     min="1"
                                     required
+                                    placeholder="0"
                                     className="w-full px-3 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] text-sm text-center"
                                     value={item.quantity === 0 ? "" : item.quantity}
                                     onChange={(e) =>
@@ -219,6 +230,7 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                                     type="number"
                                     min="0"
                                     required
+                                    placeholder="0.00"
                                     className="w-full px-3 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] text-sm"
                                     value={item.price === 0 ? "" : item.price}
                                     onChange={(e) =>
@@ -233,7 +245,7 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                                     </label>
                                 )}
                                 <div className="px-3 py-2 text-sm font-semibold text-gray-700">
-                                    ₹{item.total || 0}
+                                    Rs. {item.total || 0}
                                 </div>
                             </div>
                             <div className="col-span-1 text-right">
@@ -261,7 +273,15 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                             <button
                                 key={status}
                                 type="button"
-                                onClick={() => setFormData({ ...formData, status } as any)}
+                                onClick={() => {
+                                    const updates: any = { status };
+                                    if (status === "Paid") {
+                                        updates.paidAmount = formData.grandTotal;
+                                    } else if (status === "Unpaid") {
+                                        updates.paidAmount = 0;
+                                    }
+                                    setFormData({ ...formData, ...updates });
+                                }}
                                 className={cn(
                                     "flex-1 py-3 px-4 rounded-xl border text-sm font-medium transition-all",
                                     formData.status === status
@@ -273,6 +293,23 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                             </button>
                         ))}
                     </div>
+
+                    {(formData.status === "Partial" || formData.status === "Paid") && (
+                        <div className="mt-4 pt-4 border-t space-y-2">
+                            <label className="text-sm font-medium text-gray-700">
+                                {formData.status === "Partial" ? "Advance Amount Paid" : "Total Amount Paid"}
+                            </label>
+                            <input
+                                type="number"
+                                placeholder="Enter amount paid"
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-[#1a1a2e] focus:ring-2 focus:ring-royal-blue/20 outline-none"
+                                value={formData.paidAmount === 0 ? "" : formData.paidAmount}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, paidAmount: parseFloat(e.target.value) || 0 })
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div className="w-full md:w-80 bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
@@ -282,12 +319,13 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                     <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                             <span className="text-gray-500">Subtotal</span>
-                            <span className="font-semibold text-[#1a1a2e]">₹{formData.subtotal}</span>
+                            <span className="font-semibold text-[#1a1a2e]">Rs. {formData.subtotal}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-2 items-center">
                             <span className="text-gray-500 text-[#1a1a2e]">Tax (%)</span>
                             <input
                                 type="number"
+                                placeholder="0"
                                 className="text-right border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-royal-blue text-[#1a1a2e]"
                                 value={formData.tax === 0 ? "" : formData.tax}
                                 onChange={(e) =>
@@ -299,6 +337,7 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                             <span className="text-gray-500">Discount (%)</span>
                             <input
                                 type="number"
+                                placeholder="0"
                                 className="text-right border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-royal-blue text-[#1a1a2e]"
                                 value={formData.discount === 0 ? "" : formData.discount}
                                 onChange={(e) =>
@@ -312,7 +351,7 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                         <div className="pt-4 border-t flex justify-between items-center">
                             <span className="text-base font-bold text-gray-900">Grand Total</span>
                             <span className="text-xl font-bold text-royal-blue">
-                                ₹{formData.grandTotal}
+                                Rs. {formData.grandTotal}
                             </span>
                         </div>
                     </div>

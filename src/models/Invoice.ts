@@ -18,6 +18,7 @@ export interface IInvoice extends Document {
     tax: number;
     discount: number;
     grandTotal: number;
+    paidAmount: number;
     status: "Paid" | "Unpaid" | "Partial";
     shareSlug: string;
     dueDate: Date;
@@ -42,6 +43,7 @@ const InvoiceSchema: Schema = new Schema({
     tax: { type: Number, default: 0 },
     discount: { type: Number, default: 0 },
     grandTotal: { type: Number, required: true },
+    paidAmount: { type: Number, default: 0 },
     status: {
         type: String,
         enum: ["Paid", "Unpaid", "Partial"],
@@ -54,6 +56,11 @@ const InvoiceSchema: Schema = new Schema({
 
 // Logic for auto-generating unique invoice numbers can be handled in the API
 // but we ensure the index is present.
+
+// Force the model to use the latest schema in development
+if (process.env.NODE_ENV === "development" && mongoose.models.Invoice) {
+    delete (mongoose.models as any).Invoice;
+}
 
 const Invoice: Model<IInvoice> =
     mongoose.models.Invoice || mongoose.model<IInvoice>("Invoice", InvoiceSchema);

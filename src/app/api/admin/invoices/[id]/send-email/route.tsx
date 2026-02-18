@@ -44,7 +44,7 @@ export async function POST(
             from: `"Tanwar Tailor" <${process.env.EMAIL_USER}>`,
             to: invoice.customerEmail,
             subject: `Invoice #${invoice.invoiceNumber} from Tanwar Tailor`,
-            text: `Hello ${invoice.customerName},\n\nYour invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: ₹${invoice.grandTotal}.\n\nPlease find the attached PDF for details.\n\nRegards,\nTanwar Tailor`,
+            text: `Hello ${invoice.customerName},\n\nYour invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\nPlease find the attached PDF for details.\n\nRegards,\nTanwar Tailor`,
             attachments: [
                 {
                     filename: `Invoice_${invoice.invoiceNumber}.pdf`,

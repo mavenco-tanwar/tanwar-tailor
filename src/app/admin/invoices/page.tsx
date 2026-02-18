@@ -17,7 +17,8 @@ export default function InvoicesPage() {
         try {
             setIsLoading(true);
             const res = await fetch(
-                `/api/admin/invoices?search=${searchTerm}&status=${statusFilter}`
+                `/api/admin/invoices?search=${searchTerm}&status=${statusFilter}`,
+                { cache: "no-store" }
             );
             const data = await res.json();
             setInvoices(data.invoices || []);
@@ -30,7 +31,7 @@ export default function InvoicesPage() {
 
     const fetchStats = async () => {
         try {
-            const res = await fetch("/api/admin/stats/invoices");
+            const res = await fetch("/api/admin/stats/invoices", { cache: "no-store" });
             const data = await res.json();
             setStats(data);
         } catch (error) {
@@ -73,11 +74,12 @@ export default function InvoicesPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
-                    { label: "Total Revenue", value: `₹${stats?.totalRevenue?.toLocaleString() || 0}`, color: "bg-blue-50 text-blue-600" },
+                    { label: "Total Collected", value: `Rs. ${stats?.totalRevenue?.toLocaleString() || 0}`, color: "bg-blue-50 text-blue-600" },
+                    { label: "Remaining Balance", value: `Rs. ${stats?.pendingAmount?.toLocaleString() || 0}`, color: "bg-red-50 text-red-600" },
                     { label: "Paid", value: stats?.paidInvoices || 0, color: "bg-green-50 text-green-600" },
-                    { label: "Unpaid", value: stats?.unpaidInvoices || 0, color: "bg-red-50 text-red-600" },
+                    { label: "Unpaid", value: stats?.unpaidInvoices || 0, color: "bg-red-50 text-red-500" },
                     { label: "Partial", value: stats?.partialInvoices || 0, color: "bg-amber-50 text-amber-600" },
                 ].map((stat, i) => (
                     <div key={i} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">

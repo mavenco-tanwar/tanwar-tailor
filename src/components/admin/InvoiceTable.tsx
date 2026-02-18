@@ -10,6 +10,7 @@ interface Invoice {
     customerName: string;
     customerPhone: string;
     grandTotal: number;
+    paidAmount: number;
     status: "Paid" | "Unpaid" | "Partial";
     dueDate: string;
     createdAt: string;
@@ -34,6 +35,12 @@ export const InvoiceTable = ({ invoices, onDelete }: InvoiceTableProps) => {
                         </th>
                         <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             Total
+                        </th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Paid
+                        </th>
+                        <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                            Balance
                         </th>
                         <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                             Status
@@ -71,8 +78,14 @@ export const InvoiceTable = ({ invoices, onDelete }: InvoiceTableProps) => {
                                         </span>
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 font-semibold text-royal-blue">
-                                    ₹{invoice.grandTotal.toLocaleString()}
+                                <td className="px-6 py-4 font-semibold text-[#1a1a2e]">
+                                    Rs. {invoice.grandTotal.toLocaleString()}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-green-600 font-medium">
+                                    Rs. {invoice.paidAmount?.toLocaleString() || 0}
+                                </td>
+                                <td className="px-6 py-4 text-sm text-red-600 font-medium">
+                                    Rs. {Math.max(0, invoice.grandTotal - (invoice.paidAmount || 0)).toLocaleString()}
                                 </td>
                                 <td className="px-6 py-4">
                                     <StatusBadge status={invoice.status} />
