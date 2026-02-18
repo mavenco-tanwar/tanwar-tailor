@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search, Filter, Banknote, Wallet, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import Link from "next/link";
 import { InvoiceTable } from "@/components/admin/InvoiceTable";
 import { Button } from "@/components/ui/Button";
@@ -76,15 +76,20 @@ export default function InvoicesPage() {
             {/* Quick Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
-                    { label: "Total Collected", value: `Rs. ${stats?.totalRevenue?.toLocaleString() || 0}`, color: "bg-blue-50 text-blue-600" },
-                    { label: "Remaining Balance", value: `Rs. ${stats?.pendingAmount?.toLocaleString() || 0}`, color: "bg-red-50 text-red-600" },
-                    { label: "Paid", value: stats?.paidInvoices || 0, color: "bg-green-50 text-green-600" },
-                    { label: "Unpaid", value: stats?.unpaidInvoices || 0, color: "bg-red-50 text-red-500" },
-                    { label: "Partial", value: stats?.partialInvoices || 0, color: "bg-amber-50 text-amber-600" },
+                    { label: "Total Collected", value: `Rs. ${stats?.totalRevenue?.toLocaleString() || 0}`, color: "text-blue-600", icon: Banknote, bg: "bg-blue-50" },
+                    { label: "Remaining", value: `Rs. ${stats?.pendingAmount?.toLocaleString() || 0}`, color: "text-red-600", icon: Wallet, bg: "bg-red-50" },
+                    { label: "Full Paid", value: stats?.paidInvoices || 0, color: "text-green-600", icon: CheckCircle2, bg: "bg-green-50" },
+                    { label: "Unpaid", value: stats?.unpaidInvoices || 0, color: "text-red-500", icon: AlertCircle, bg: "bg-red-50/50" },
+                    { label: "Partial", value: stats?.partialInvoices || 0, color: "text-amber-600", icon: Clock, bg: "bg-amber-50" },
                 ].map((stat, i) => (
-                    <div key={i} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{stat.label}</p>
-                        <p className={`text-2xl font-bold mt-2 ${stat.color.split(' ')[1]}`}>{stat.value}</p>
+                    <div key={i} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md flex flex-col">
+                        <div className="flex items-center justify-between mb-2">
+                            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{stat.label}</p>
+                            <div className={`p-1.5 rounded-lg ${stat.bg} ${stat.color}`}>
+                                <stat.icon className="w-3 h-3" />
+                            </div>
+                        </div>
+                        <p className={`text-xl font-black ${stat.color}`}>{stat.value}</p>
                     </div>
                 ))}
             </div>

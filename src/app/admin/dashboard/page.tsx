@@ -2,6 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+    CheckCircle2,
+    Clock,
+    AlertCircle,
+    Wallet,
+    Banknote,
+    ArrowUpRight,
+    MessageSquare,
+    Mail,
+    Plus,
+    FileText,
+    History
+} from "lucide-react";
 
 interface DashboardStats {
     totalContacts: number;
@@ -69,110 +82,155 @@ export default function AdminDashboard() {
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-[#1a1a2e]">Dashboard Overview</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
-                    <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">Total Queries</h3>
-                    <p className="text-3xl font-bold text-[#1a1a2e] mt-2">
+            {/* Premium Financial Summary Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="p-6 border-b border-gray-50 flex justify-between items-center">
+                        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center">
+                            <Banknote className="w-4 h-4 mr-2 text-royal-blue" />
+                            Financial Performance
+                        </h3>
+                        <span className="text-[10px] font-bold bg-blue-50 text-royal-blue px-2 py-1 rounded-full uppercase">Real-time</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2">
+                        <div className="p-8 border-r border-gray-50">
+                            <p className="text-gray-500 text-xs font-semibold uppercase tracking-widest mb-1">Total Collected</p>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-4xl font-black text-gray-900 leading-none">
+                                    {loading ? "--" : `Rs. ${invoiceStats.totalRevenue.toLocaleString()}`}
+                                </span>
+                                <div className="flex items-center text-green-500 text-xs font-bold">
+                                    <ArrowUpRight className="w-3 h-3 mr-0.5" />
+                                    Active
+                                </div>
+                            </div>
+                            <p className="text-gray-400 text-[10px] mt-4 font-medium uppercase tracking-tighter">
+                                From {invoiceStats.paidInvoices + invoiceStats.partialInvoices} successful transactions
+                            </p>
+                        </div>
+                        <div className="p-8 flex flex-col justify-center">
+                            <p className="text-gray-500 text-xs font-semibold uppercase tracking-widest mb-1">Remaining Balance</p>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-4xl font-black text-red-500 leading-none">
+                                    {loading ? "--" : `Rs. ${invoiceStats.pendingAmount.toLocaleString()}`}
+                                </span>
+                            </div>
+                            <p className="text-gray-400 text-[10px] mt-4 font-medium uppercase tracking-tighter">
+                                Pending across {invoiceStats.unpaidInvoices + invoiceStats.partialInvoices} invoices
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col">
+                    <div className="flex justify-between items-start mb-6">
+                        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center">
+                            <History className="w-4 h-4 mr-2 text-amber-500" />
+                            Invoice Status
+                        </h3>
+                        <Link href="/admin/invoices" className="text-royal-blue hover:text-blue-800 text-[10px] font-black uppercase tracking-widest">
+                            View All
+                        </Link>
+                    </div>
+
+                    <div className="space-y-4 flex-1 flex flex-col justify-center">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-green-50/50 border border-green-100/50">
+                            <div className="flex items-center">
+                                <div className="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-white mr-3 shadow-sm shadow-green-200">
+                                    <CheckCircle2 className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-gray-900">Fully Paid</p>
+                                    <p className="text-[10px] text-gray-500">Payments settled</p>
+                                </div>
+                            </div>
+                            <span className="text-xl font-black text-green-600">{loading ? "--" : invoiceStats.paidInvoices}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-red-50/50 border border-red-100/50">
+                            <div className="flex items-center">
+                                <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center text-white mr-3 shadow-sm shadow-red-200">
+                                    <AlertCircle className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-gray-900">Unpaid</p>
+                                    <p className="text-[10px] text-gray-500">Zero payment</p>
+                                </div>
+                            </div>
+                            <span className="text-xl font-black text-red-600">{loading ? "--" : invoiceStats.unpaidInvoices}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-amber-50/50 border border-amber-100/50">
+                            <div className="flex items-center">
+                                <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-white mr-3 shadow-sm shadow-amber-200">
+                                    <Clock className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-gray-900">Partial</p>
+                                    <p className="text-[10px] text-gray-500">Advance paid</p>
+                                </div>
+                            </div>
+                            <span className="text-xl font-black text-amber-600">{loading ? "--" : invoiceStats.partialInvoices}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Queries and Actions Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
+                    <div className="flex items-center mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-royal-blue/10 flex items-center justify-center text-royal-blue mr-3">
+                            <MessageSquare className="w-5 h-5" />
+                        </div>
+                        <h3 className="text-gray-900 text-sm font-bold uppercase tracking-wider">Total Queries</h3>
+                    </div>
+                    <p className="text-4xl font-black text-gray-900">
                         {loading ? "--" : stats.totalContacts}
                     </p>
-                    <p className="text-xs text-green-500 mt-1">
-                        {loading ? "Loading..." : `+${stats.todayContacts} today`}
-                    </p>
+                    <div className="flex items-center mt-2">
+                        <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-full">
+                            {loading ? "..." : `+${stats.todayContacts} new today`}
+                        </span>
+                    </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
-                    <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">Unread Messages</h3>
-                    <p className="text-3xl font-bold text-[#c5a059] mt-2">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center">
+                            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 mr-3">
+                                <Mail className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-gray-900 text-sm font-bold uppercase tracking-wider">Unread</h3>
+                        </div>
+                        {stats.unreadContacts > 0 && (
+                            <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
+                        )}
+                    </div>
+                    <p className="text-4xl font-black text-gray-900">
                         {loading ? "--" : stats.unreadContacts}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                        {stats.unreadContacts > 0 ? "Requires attention" : "All caught up!"}
+                    <p className="text-xs font-medium text-gray-400 mt-2 uppercase tracking-tight">
+                        {stats.unreadContacts > 0 ? "Immediate response needed" : "Inbox is perfectly clean"}
                     </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
-                    <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">Total Collected</h3>
-                    <p className="text-3xl font-bold text-royal-blue mt-2">
-                        {loading ? "--" : `Rs. ${invoiceStats.totalRevenue.toLocaleString()}`}
-                    </p>
-                    <p className="text-xs text-green-500 mt-1">
-                        From {invoiceStats.paidInvoices + invoiceStats.partialInvoices} payments
-                    </p>
-                </div>
-
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 transition-all hover:shadow-md">
-                    <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider">Remaining Balance</h3>
-                    <p className="text-3xl font-bold text-red-500 mt-2">
-                        {loading ? "--" : `Rs. ${invoiceStats.pendingAmount.toLocaleString()}`}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                        Pending from {invoiceStats.unpaidInvoices + invoiceStats.partialInvoices} invoices
-                    </p>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white px-6 py-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:shadow-md">
-                    <div>
-                        <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Fully Paid</h3>
-                        <p className="text-2xl font-bold text-green-600 mt-1">{loading ? "--" : invoiceStats.paidInvoices}</p>
-                    </div>
-                    <div className="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center text-green-600 font-bold">100%</div>
-                </div>
-
-                <div className="bg-white px-6 py-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:shadow-md">
-                    <div>
-                        <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Unpaid (Zero)</h3>
-                        <p className="text-2xl font-bold text-red-500 mt-1">{loading ? "--" : invoiceStats.unpaidInvoices}</p>
-                    </div>
-                    <div className="h-10 w-10 rounded-full bg-red-50 flex items-center justify-center text-red-500 font-bold">0%</div>
-                </div>
-
-                <div className="bg-white px-6 py-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:shadow-md">
-                    <div>
-                        <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider">Partial Payment</h3>
-                        <p className="text-2xl font-bold text-amber-500 mt-1">{loading ? "--" : invoiceStats.partialInvoices}</p>
-                    </div>
-                    <div className="h-10 w-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 font-bold">&gt;0%</div>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 className="text-gray-500 text-sm font-medium">System Status</h3>
-                    <div className="flex items-center mt-2">
-                        <span
-                            className={`h-3 w-3 rounded-full mr-2 ${stats.systemStatus === "active"
-                                ? "bg-green-500"
-                                : "bg-yellow-500"
-                                }`}
-                        ></span>
-                        <p className="text-lg font-bold text-[#1a1a2e]">
-                            {loading
-                                ? "Checking..."
-                                : stats.systemStatus === "active"
-                                    ? "Active"
-                                    : "Loading"}
-                        </p>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1">
-                        {stats.systemStatus === "active"
-                            ? "System operational"
-                            : "Connecting..."}
-                    </p>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-center">
-                    <h3 className="text-lg font-semibold text-[#1a1a2e] mb-4">Quick Actions</h3>
-                    <div className="flex flex-wrap gap-2">
-                        <Link href="/admin/invoices/create">
-                            <button className="px-4 py-2 bg-royal-blue text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                                Create Invoice
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-center">
+                    <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-4 flex items-center">
+                        <Plus className="w-4 h-4 mr-2 text-royal-blue" />
+                        Quick Actions
+                    </h3>
+                    <div className="grid grid-cols-2 gap-3">
+                        <Link href="/admin/invoices/create" className="w-full">
+                            <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-royal-blue text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+                                <FileText className="w-3 h-3" />
+                                Invoice
                             </button>
                         </Link>
-                        <Link href="/admin/contacts">
-                            <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                                View Contacts
+                        <Link href="/admin/contacts" className="w-full">
+                            <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 text-gray-900 border border-gray-100 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-100 transition-all">
+                                <MessageSquare className="w-3 h-3" />
+                                Inbox
                             </button>
                         </Link>
                     </div>
