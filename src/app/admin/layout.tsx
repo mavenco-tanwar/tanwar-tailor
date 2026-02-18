@@ -53,7 +53,7 @@ export default function AdminLayout({
                             <img
                                 src="/images/website-logo.png"
                                 alt="Tanwar Tailor"
-                                className="h-full w-auto object-contain brightness-0 invert"
+                                className="h-full w-auto object-contain"
                             />
                         </Link>
                     </div>
