@@ -85,7 +85,7 @@ export default function AdminDashboard() {
             {/* Premium Financial Summary Row */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="p-6 border-b border-gray-50 flex justify-between items-center">
+                    <div className="p-6 border-b border-gray-50 flex justify-between md:flex-row flex-col md:gap-0 gap-2 md:items-center items-start">
                         <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center">
                             <Banknote className="w-4 h-4 mr-2 text-royal-blue" />
                             Financial Performance
