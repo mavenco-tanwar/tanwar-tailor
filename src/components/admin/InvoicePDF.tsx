@@ -8,17 +8,27 @@ import {
 } from "@react-pdf/renderer";
 import { format } from "date-fns";
 
-// Register Roboto font for better Unicode support (Rupee symbol)
-Font.register({
-    family: "Roboto",
-    src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
-});
+// Use a check that is harder for bundlers to statically analyze away
+import { fonts } from "./fonts";
+
+// Register Roboto font using base64 data URLs to ensure environment-independent loading
+try {
+    Font.register({
+        family: "RobotoV2",
+        fonts: [
+            { src: fonts.regular },
+            { src: fonts.bold, fontWeight: 'bold' }
+        ]
+    });
+} catch (e) {
+    console.warn("Failed to register fonts:", e);
+}
 
 const styles = StyleSheet.create({
     page: {
         padding: 40,
         fontSize: 10,
-        fontFamily: "Roboto",
+        fontFamily: "RobotoV2",
         color: "#1a1a2e",
     },
     header: {
@@ -213,8 +223,8 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                         <View key={index} style={styles.tableRow}>
                             <Text style={styles.colDesc}>{item.description}</Text>
                             <Text style={styles.colQty}>{item.quantity}</Text>
-                            <Text style={styles.colPrice}>₹ {item.price}</Text>
-                            <Text style={styles.colTotal}>₹ {item.total}</Text>
+                            <Text style={styles.colPrice}>Rs. {item.price}</Text>
+                            <Text style={styles.colTotal}>Rs. {item.total}</Text>
                         </View>
                     ))}
                 </View>
@@ -224,13 +234,13 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                     <View style={styles.summaryBox}>
                         <View style={styles.summaryRow}>
                             <Text style={styles.summaryLabel}>Subtotal</Text>
-                            <Text style={styles.summaryValue}>₹ {invoice.subtotal}</Text>
+                            <Text style={styles.summaryValue}>Rs. {invoice.subtotal}</Text>
                         </View>
                         {invoice.tax > 0 && (
                             <View style={styles.summaryRow}>
                                 <Text style={styles.summaryLabel}>Tax ({invoice.tax}%)</Text>
                                 <Text style={styles.summaryValue}>
-                                    ₹{((invoice.subtotal * invoice.tax) / 100).toFixed(2)}
+                                    Rs. {((invoice.subtotal * invoice.tax) / 100).toFixed(2)}
                                 </Text>
                             </View>
                         )}
@@ -238,13 +248,13 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                             <View style={styles.summaryRow}>
                                 <Text style={styles.summaryLabel}>Discount ({invoice.discount}%)</Text>
                                 <Text style={styles.summaryValue}>
-                                    -₹ {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}
+                                    -Rs. {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}
                                 </Text>
                             </View>
                         )}
                         <View style={styles.grandTotal}>
                             <Text style={styles.totalText}>Total</Text>
-                            <Text style={styles.totalText}>₹ {invoice.grandTotal}</Text>
+                            <Text style={styles.totalText}>Rs. {invoice.grandTotal}</Text>
                         </View>
                     </View>
                 </View>
