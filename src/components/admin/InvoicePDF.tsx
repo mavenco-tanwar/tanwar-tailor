@@ -8,14 +8,17 @@ import {
 } from "@react-pdf/renderer";
 import { format } from "date-fns";
 
-// Register fonts if needed, otherwise use standard ones
-// Font.register({ family: 'Playfair Display', src: '...' });
+// Register Roboto font for better Unicode support (Rupee symbol)
+Font.register({
+    family: "Roboto",
+    src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
+});
 
 const styles = StyleSheet.create({
     page: {
         padding: 40,
         fontSize: 10,
-        fontFamily: "Helvetica",
+        fontFamily: "Roboto",
         color: "#1a1a2e",
     },
     header: {
@@ -210,8 +213,8 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                         <View key={index} style={styles.tableRow}>
                             <Text style={styles.colDesc}>{item.description}</Text>
                             <Text style={styles.colQty}>{item.quantity}</Text>
-                            <Text style={styles.colPrice}>₹{item.price}</Text>
-                            <Text style={styles.colTotal}>₹{item.total}</Text>
+                            <Text style={styles.colPrice}>₹ {item.price}</Text>
+                            <Text style={styles.colTotal}>₹ {item.total}</Text>
                         </View>
                     ))}
                 </View>
@@ -221,7 +224,7 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                     <View style={styles.summaryBox}>
                         <View style={styles.summaryRow}>
                             <Text style={styles.summaryLabel}>Subtotal</Text>
-                            <Text style={styles.summaryValue}>₹{invoice.subtotal}</Text>
+                            <Text style={styles.summaryValue}>₹ {invoice.subtotal}</Text>
                         </View>
                         {invoice.tax > 0 && (
                             <View style={styles.summaryRow}>
@@ -235,13 +238,13 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                             <View style={styles.summaryRow}>
                                 <Text style={styles.summaryLabel}>Discount ({invoice.discount}%)</Text>
                                 <Text style={styles.summaryValue}>
-                                    -₹{((invoice.subtotal * invoice.discount) / 100).toFixed(2)}
+                                    -₹ {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}
                                 </Text>
                             </View>
                         )}
                         <View style={styles.grandTotal}>
                             <Text style={styles.totalText}>Total</Text>
-                            <Text style={styles.totalText}>₹{invoice.grandTotal}</Text>
+                            <Text style={styles.totalText}>₹ {invoice.grandTotal}</Text>
                         </View>
                     </View>
                 </View>
