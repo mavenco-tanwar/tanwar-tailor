@@ -24,13 +24,13 @@ const Navbar = () => {
         <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
-                    {/* Logo */}
-                    <div className="flex items-center justify-center h-20">
-                        <Link href="/" className="flex items-center gap-2 font-playfair">
-                            <Scissors className="h-6 w-6 text-royal-blue" />
-                            <h1 className="text-xl font-bold tracking-wider text-royal-blue">
-                                Tanwar <span className="text-[#c5a059]">Tailor</span>
-                            </h1>
+                    <div className="flex items-center justify-center">
+                        <Link href="/" className="flex items-center h-16">
+                            <img
+                                src="/images/website-logo.png"
+                                alt="Tanwar Tailor"
+                                className="h-full w-auto object-contain"
+                            />
                         </Link>
                     </div>
 

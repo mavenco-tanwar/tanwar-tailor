@@ -8,7 +8,13 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {/* Brand Info */}
                     <div className="space-y-4">
-                        <h3 className="text-2xl font-bold font-display text-royal-gold">Tanwar Tailor</h3>
+                        <Link href="/" className="inline-block h-16">
+                            <img
+                                src="/images/website-logo.png"
+                                alt="Tanwar Tailor"
+                                className="h-full w-auto object-contain"
+                            />
+                        </Link>
                         <p className="text-gray-300 max-w-xs">
                             Ladies & Gents Alteration Specialist. Specialized in custom stitching, bridal dresses, and fitting.
                         </p>

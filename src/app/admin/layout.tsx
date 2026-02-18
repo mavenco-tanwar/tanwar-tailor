@@ -49,11 +49,12 @@ export default function AdminLayout({
                         }`}
                 >
                     <div className="flex items-center justify-center h-20 bg-[#2a2a4e]">
-                        <Link href="/" className="flex items-center gap-2 font-playfair">
-                            <Scissors className="h-6 w-6 text-[#c5a059]" />
-                            <h1 className="text-xl font-bold tracking-wider">
-                                Tanwar <span className="text-[#c5a059]">Tailor</span>
-                            </h1>
+                        <Link href="/" className="flex items-center h-12">
+                            <img
+                                src="/images/website-logo.png"
+                                alt="Tanwar Tailor"
+                                className="h-full w-auto object-contain brightness-0 invert"
+                            />
                         </Link>
                     </div>
 

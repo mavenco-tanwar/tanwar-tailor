@@ -17,17 +17,17 @@ export const metadata: Metadata = {
   title: "Tanwar Tailor | Ladies & Gents Alteration Specialist",
   description: "Expert tailoring services in Sikar. Specialists in shirt, pant, suit, bridal dresses, and custom stitching for men and women.",
   icons: {
-    icon: "/images/favicon.png",
-    apple: "/images/favicon.png",
+    icon: "/images/favicon-logo.png",
+    apple: "/images/favicon-logo.png",
   },
   openGraph: {
     title: "Tanwar Tailor | Ladies & Gents Alteration Specialist",
     description: "Expert tailoring services in Sikar. Specialists in shirt, pant, suit, bridal dresses, and custom stitching for men and women.",
-    images: ["/images/favicon.png"],
+    images: ["/images/favicon-logo.png"],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/images/favicon.png"],
+    images: ["/images/favicon-logo.png"],
   },
 };
 
