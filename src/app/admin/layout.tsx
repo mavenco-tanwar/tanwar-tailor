@@ -25,6 +25,7 @@ export default function AdminLayout({
 
     const navItems = [
         { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+        { name: "Invoices", href: "/admin/invoices", icon: Scissors }, // Using Scissors as a placeholder for invoice or finding a better icon
         { name: "Contacts", href: "/admin/contacts", icon: Users },
     ];
 
