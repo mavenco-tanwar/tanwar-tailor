@@ -92,7 +92,9 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             ? `${window.location.origin}/invoices/view/${invoice.shareSlug}`
             : null;
 
-        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : `You can collect your order by ${format(new Date(invoice.dueDate), "dd MMM yyyy")}.`}\n\nThank you for choosing Tanwar Tailor!`;
+        const reviewLink = `${window.location.origin}/reviews/submit?name=${encodeURIComponent(invoice.customerName)}&phone=${encodeURIComponent(invoice.customerPhone)}`;
+
+        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : `You can collect your order by ${format(new Date(invoice.dueDate), "dd MMM yyyy")}.`}\n\nWe would love to hear your feedback! Please share your experience here: ${reviewLink}\n\nThank you for choosing Tanwar Tailor!`;
 
         const encodedMsg = encodeURIComponent(message);
         window.open(`https://wa.me/${invoice.customerPhone}?text=${encodedMsg}`, "_blank");
@@ -103,7 +105,9 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             ? `${window.location.origin}/invoices/view/${invoice.shareSlug}`
             : null;
 
-        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : ""}`;
+        const reviewLink = `${window.location.origin}/reviews/submit?name=${encodeURIComponent(invoice.customerName)}&phone=${encodeURIComponent(invoice.customerPhone)}`;
+
+        const message = `Hello ${invoice.customerName}, your invoice #${invoice.invoiceNumber} from Tanwar Tailor is ready. Total Amount: Rs. ${invoice.grandTotal}.\n\n${publicUrl ? `You can view and download your invoice here: ${publicUrl}` : ""}\n\nShare your feedback: ${reviewLink}`;
 
         if (navigator.share && navigator.canShare) {
             try {

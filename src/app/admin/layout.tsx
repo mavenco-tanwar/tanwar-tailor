@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { LayoutDashboard, Users, LogOut, Menu, X, Scissors } from "lucide-react";
+import { LayoutDashboard, Users, LogOut, Menu, X, Scissors, Star } from "lucide-react";
 
 export default function AdminLayout({
     children,
@@ -27,6 +27,7 @@ export default function AdminLayout({
         { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
         { name: "Invoices", href: "/admin/invoices", icon: Scissors }, // Using Scissors as a placeholder for invoice or finding a better icon
         { name: "Contacts", href: "/admin/contacts", icon: Users },
+        { name: "Reviews", href: "/admin/reviews", icon: Star },
     ];
 
     const isLoginPage = pathname === "/admin/login";
