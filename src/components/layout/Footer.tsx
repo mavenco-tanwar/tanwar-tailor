@@ -49,7 +49,7 @@ const Footer = () => {
                                 <MapPin className="w-5 h-5 text-royal-gold mt-1 flex-shrink-0" />
                                 <span className="text-gray-300 text-sm">
                                     Near Tehsil, Behind Sana Fashion & Pakija Collection,<br />
-                                    Mochivada Road, Sikar, Rajasthan, India
+                                    Mochiwada Road, Sikar, Rajasthan, India
                                 </span>
                             </div>
                             <div className="flex items-center space-x-3">

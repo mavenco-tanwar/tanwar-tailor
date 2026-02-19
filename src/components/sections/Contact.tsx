@@ -84,7 +84,7 @@ const Contact = () => {
                                 <h4 className="text-lg font-semibold">Visit Us</h4>
                                 <p className="text-gray-300 mt-1">
                                     Near Tehsil, Behind Sana Fashion & Pakija Collection,<br />
-                                    Mochivada Road, Sikar, Rajasthan, India
+                                    Mochiwada Road, Sikar, Rajasthan, India
                                 </p>
                             </div>
                         </div>

@@ -183,7 +183,7 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                         <Text style={styles.subtitle}>Premium Bespoke Tailoring</Text>
                         <View style={styles.address}>
                             <Text>Near Tehsil, Behind Sana Fashion & Pakija Collection</Text>
-                            <Text>Mochivada Road, Sikar, Rajasthan - 332001</Text>
+                            <Text>Mochiwada Road, Sikar, Rajasthan - 332001</Text>
                             <Text>Phone: +91-876-997-2001</Text>
                             <Text>Phone: +91-935-165-0955</Text>
                             <Text>Email: tailortanwar@gmail.com</Text>
