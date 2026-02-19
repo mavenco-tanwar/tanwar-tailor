@@ -20,10 +20,10 @@ const Footer = () => {
                         </p>
                         <div className="flex space-x-4 pt-2">
                             {/* Social Placeholders */}
-                            <a href="#" className="text-gray-300 hover:text-royal-gold transition-colors">
+                            <a href="https://www.instagram.com/tanwartailor_sikar/" target="_blank" className="text-gray-300 hover:text-royal-gold transition-colors">
                                 <Instagram className="w-6 h-6" />
                             </a>
-                            <a href="#" className="text-gray-300 hover:text-royal-gold transition-colors">
+                            <a href="https://www.facebook.com/profile.php?id=61588328432513" target="_blank" className="text-gray-300 hover:text-royal-gold transition-colors">
                                 <Facebook className="w-6 h-6" />
                             </a>
                         </div>
