@@ -10,6 +10,7 @@ import { format } from "date-fns";
 
 // Use a check that is harder for bundlers to statically analyze away
 import { fonts } from "./fonts";
+import { Image } from "@react-pdf/renderer";
 
 // Register Roboto font using base64 data URLs to ensure environment-independent loading
 try {
@@ -127,10 +128,13 @@ const styles = StyleSheet.create({
     grandTotal: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 8,
-        paddingTop: 8,
+        marginTop: 4,
+        paddingTop: 4,
+        paddingBottom: 4,
         borderTop: 2,
         borderTopColor: "#1a1a2e",
+        borderBottom: 2,
+        borderBottomColor: "#1a1a2e",
     },
     totalText: {
         fontSize: 14,
@@ -170,7 +174,12 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                 {/* Header */}
                 <View style={styles.header}>
                     <View style={styles.businessInfo}>
-                        <Text style={styles.title}>Tanwar Tailor</Text>
+                        {/* <Text style={styles.title}>Tanwar Tailor</Text>  */}
+                        <Image
+                            src="/images/website-logo.png"
+                            style={{ width: 120, height: 40, objectFit: "contain" }}
+                        />
+
                         <Text style={styles.subtitle}>Premium Bespoke Tailoring</Text>
                         <View style={styles.address}>
                             <Text>Near Tehsil, Behind Sana Fashion & Pakija Collection</Text>
@@ -232,12 +241,13 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                 {/* Summary */}
                 <View style={styles.summarySection}>
                     <View style={styles.summaryBox}>
-                        <View style={styles.summaryRow}>
+                        paddingVertical: 4,
+                        <View style={[styles.summaryRow, { borderBottom: 1, borderBottomColor: '#eee', marginTop: 2, paddingTop: 2, paddingBottom: 4 }]}>
                             <Text style={styles.summaryLabel}>Subtotal</Text>
                             <Text style={styles.summaryValue}>Rs. {invoice.subtotal}</Text>
                         </View>
                         {invoice.tax > 0 && (
-                            <View style={styles.summaryRow}>
+                            <View style={[styles.summaryRow, { borderBottom: 1, borderBottomColor: '#eee', marginTop: 2, paddingTop: 2, paddingBottom: 4 }]}>
                                 <Text style={styles.summaryLabel}>Tax ({invoice.tax}%)</Text>
                                 <Text style={styles.summaryValue}>
                                     Rs. {((invoice.subtotal * invoice.tax) / 100).toFixed(2)}
@@ -245,26 +255,26 @@ export const InvoicePDF = ({ invoice }: { invoice: any }) => {
                             </View>
                         )}
                         {invoice.discount > 0 && (
-                            <View style={styles.summaryRow}>
+                            <View style={[styles.summaryRow, { borderBottom: 1, borderBottomColor: '#eee', marginTop: 2, paddingTop: 2, paddingBottom: 4 }]}>
                                 <Text style={styles.summaryLabel}>Discount ({invoice.discount}%)</Text>
                                 <Text style={styles.summaryValue}>
                                     -Rs. {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}
                                 </Text>
                             </View>
                         )}
-                        <View style={styles.grandTotal}>
-                            <Text style={styles.totalText}>Total Amount</Text>
-                            <Text style={styles.totalText}>Rs. {invoice.grandTotal}</Text>
-                        </View>
-                        <View style={styles.summaryRow}>
+                        <View style={[styles.summaryRow, { borderBottom: 1, borderBottomColor: '#eee', marginTop: 2, paddingTop: 2, paddingBottom: 4 }]}>
                             <Text style={styles.summaryLabel}>Amount Paid</Text>
                             <Text style={styles.summaryValue}>Rs. {invoice.paidAmount || 0}</Text>
                         </View>
-                        <View style={[styles.summaryRow, { borderTop: 1, borderTopColor: '#eee', marginTop: 4, paddingTop: 4 }]}>
+                        <View style={[styles.summaryRow, { marginTop: 2, paddingTop: 2, paddingBottom: 4 }]}>
                             <Text style={[styles.summaryLabel, { fontWeight: 'bold', color: '#1a1a2e' }]}>Balance Due</Text>
                             <Text style={[styles.summaryValue, { color: '#d93025' }]}>
                                 Rs. {Math.max(0, invoice.grandTotal - (invoice.paidAmount || 0))}
                             </Text>
+                        </View>
+                        <View style={styles.grandTotal}>
+                            <Text style={styles.totalText}>Total Amount</Text>
+                            <Text style={styles.totalText}>Rs. {invoice.grandTotal}</Text>
                         </View>
                     </View>
                 </View>

@@ -6,21 +6,19 @@ import {
     ChevronLeft,
     Download,
     Mail,
-    Phone as WhatsAppIcon,
     Printer,
     CheckCircle2,
-    Calendar,
-    User,
-    CreditCard,
+    MessageCircle,
     Share2,
 } from "lucide-react";
 import Link from "next/link";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
-import { PDFDownloadLink, PDFViewer, pdf } from "@react-pdf/renderer";
+import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import { InvoicePDF } from "@/components/admin/InvoicePDF";
 import { format } from "date-fns";
+import Image from "next/image";
 
 export default function InvoiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -172,30 +170,30 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                     {invoice.status !== "Paid" && (
                         <Button
                             variant="primary"
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-emerald-600 hover:bg-emerald-700"
                             onClick={handleMarkAsPaid}
                         >
                             <CheckCircle2 className="w-4 h-4 mr-2" />
                             Mark as Paid
                         </Button>
                     )}
-                    <Button variant="primary" onClick={shareWhatsApp}>
-                        <WhatsAppIcon className="w-4 h-4 mr-2" />
-                        WhatsApp
-                    </Button>
                     <Button
                         variant="primary"
                         onClick={handleShareFile}
-                        className="bg-purple-600 hover:bg-purple-700"
+                        className="bg-[#09637E] hover:bg-[#074d61]"
                     >
                         <Share2 className="w-4 h-4 mr-2" />
                         Share File
+                    </Button>
+                    <Button variant="primary" onClick={shareWhatsApp} className="bg-green-600 hover:bg-green-700">
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        WhatsApp
                     </Button>
                     <Button
                         variant="primary"
                         onClick={handleSendEmail}
                         disabled={isSendingEmail || !invoice.customerEmail}
-                        className="bg-royal-blue"
+                        className="bg-[#8A7650] hover:bg-[#7a6645]"
                     >
                         <Mail className="w-4 h-4 mr-2" />
                         {isSendingEmail ? "Sending..." : "Email PDF"}
@@ -208,7 +206,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                         {({ loading }) => (
                             <Button
                                 variant="primary"
-                                className="bg-[#c5a059] hover:bg-[#b08d4b]"
+                                className="bg-[#BF4646] hover:bg-[#a83a3a]"
                                 disabled={loading}
                             >
                                 <Download className="w-4 h-4 mr-2" />
@@ -242,7 +240,13 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                         <div className="p-8 md:p-12 max-w-2xl mx-auto space-y-12 bg-white">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-royal-blue">Tanwar Tailor</h2>
+                                    {/* <h2 className="text-2xl font-bold text-royal-blue">Tanwar Tailor</h2> */}
+                                    <Image
+                                        src="/images/website-logo.png"
+                                        alt="Tanwar Tailor"
+                                        width={120}
+                                        height={40}
+                                    />
                                     <p className="text-sm text-gray-500 mt-1">Premium Bespoke Tailoring</p>
                                 </div>
                                 <div className="text-right">
@@ -266,8 +270,8 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                                 </div>
                             </div>
 
-                            <table className="w-full text-left">
-                                <thead className="border-b-2 border-gray-100">
+                            <table className="w-full text-left border-b-2 border-gray-100">
+                                <thead className="border-b-2 border-t-2 border-gray-100">
                                     <tr>
                                         <th className="py-3 text-sm font-bold text-[#1a1a2e]">Description</th>
                                         <th className="py-3 text-sm font-bold text-center text-[#1a1a2e]">Qty</th>
@@ -289,33 +293,33 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
 
                             <div className="flex justify-end pt-6 border-t">
                                 <div className="w-full md:w-64 space-y-3">
-                                    <div className="flex justify-between text-sm">
+                                    <div className="flex justify-between text-sm border-b pb-2 mb-2 border-gray-100">
                                         <span className="text-gray-500">Subtotal</span>
                                         <span className="font-medium text-gray-500">Rs. {invoice.subtotal}</span>
                                     </div>
                                     {invoice.tax > 0 && (
-                                        <div className="flex justify-between text-sm">
+                                        <div className="flex justify-between text-sm border-b pb-2 mb-2 border-gray-100">
                                             <span className="text-gray-500">Tax ({invoice.tax}%)</span>
-                                            <span className="font-medium">Rs. {((invoice.subtotal * invoice.tax) / 100).toFixed(2)}</span>
+                                            <span className="font-medium text-gray-500">Rs. {((invoice.subtotal * invoice.tax) / 100).toFixed(2)}</span>
                                         </div>
                                     )}
                                     {invoice.discount > 0 && (
-                                        <div className="flex justify-between text-sm text-red-500">
+                                        <div className="flex justify-between text-sm border-b pb-2 mb-2 text-gray-500 border-gray-100">
                                             <span>Discount ({invoice.discount}%)</span>
-                                            <span className="font-medium">-Rs. {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}</span>
+                                            <span className="font-medium text-red-500">-Rs. {((invoice.subtotal * invoice.discount) / 100).toFixed(2)}</span>
                                         </div>
                                     )}
-                                    <div className="flex justify-between pt-3 border-t-2 border-gray-900">
-                                        <span className="text-base font-bold text-gray-900">Total Amount</span>
-                                        <span className="text-xl font-bold text-royal-blue">Rs. {invoice.grandTotal}</span>
-                                    </div>
-                                    <div className="flex justify-between text-sm pt-2">
+                                    <div className="flex justify-between text-sm border-b pb-2 mb-2 border-gray-100">
                                         <span className="text-gray-500">Amount Paid</span>
                                         <span className="font-medium text-green-600">Rs. {invoice.paidAmount || 0}</span>
                                     </div>
-                                    <div className="flex justify-between text-sm pt-1 pb-2 border-b">
-                                        <span className="text-gray-500">Balance Due</span>
+                                    <div className="flex justify-between text-sm pb-2 border-b mb-0 border-gray-100">
+                                        <span className="text-red-500">Balance Due</span>
                                         <span className="font-bold text-red-600">Rs. {Math.max(0, invoice.grandTotal - (invoice.paidAmount || 0))}</span>
+                                    </div>
+                                    <div className="flex justify-between pt-2 pb-2 border-t-2 border-b-2 border-gray-900">
+                                        <span className="text-base font-bold text-gray-900">Total Amount</span>
+                                        <span className="text-xl font-bold text-royal-blue">Rs. {invoice.grandTotal}</span>
                                     </div>
                                 </div>
                             </div>
