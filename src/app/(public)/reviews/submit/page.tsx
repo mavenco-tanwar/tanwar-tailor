@@ -5,6 +5,7 @@ import { Star, Send, CheckCircle2, ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { isValidIndianMobile } from "@/lib/validation";
 
 function ReviewForm() {
     const searchParams = useSearchParams();
@@ -38,6 +39,12 @@ function ReviewForm() {
             setError("Please select a rating");
             return;
         }
+
+        if (!isValidIndianMobile(formData.phone)) {
+            setError("Please enter a valid Indian mobile number.");
+            return;
+        }
+
         setError("");
         setIsSubmitting(true);
 

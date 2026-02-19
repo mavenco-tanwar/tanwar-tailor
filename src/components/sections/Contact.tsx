@@ -4,6 +4,7 @@ import { useState } from "react";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
 import { Phone, MapPin, Mail, Send } from "lucide-react";
+import { isValidIndianMobile } from "@/lib/validation";
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -43,6 +44,18 @@ const Contact = () => {
             setStatus("error");
             setErrorMessage("Failed to send message. Please try again.");
         }
+    };
+
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!isValidIndianMobile(formData.phone)) {
+            setStatus("error");
+            setErrorMessage("Please enter a valid Indian mobile number.");
+            return;
+        }
+
+        handleSubmit(e);
     };
 
     return (
@@ -107,7 +120,7 @@ const Contact = () => {
                 {/* Contact Form */}
                 <div className="bg-white p-8 rounded-xl shadow-2xl text-gray-800">
                     <h3 className="text-2xl font-bold font-display text-royal-blue mb-6">Send us a Message</h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleFormSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">Name</label>
                             <input

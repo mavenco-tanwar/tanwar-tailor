@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { isValidIndianMobile } from "@/lib/validation";
 
 export interface IInvoiceItem {
     description: string;
@@ -28,7 +29,14 @@ export interface IInvoice extends Document {
 const InvoiceSchema: Schema = new Schema({
     invoiceNumber: { type: String, required: true, unique: true },
     customerName: { type: String, required: true },
-    customerPhone: { type: String, required: true },
+    customerPhone: {
+        type: String,
+        required: true,
+        validate: {
+            validator: isValidIndianMobile,
+            message: (props: any) => `${props.value} is not a valid Indian mobile number!`
+        }
+    },
     customerEmail: { type: String },
     customerAddress: { type: String },
     items: [

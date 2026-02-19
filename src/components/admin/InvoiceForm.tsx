@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Plus, Trash2, Save, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { isValidIndianMobile } from "@/lib/validation";
 
 interface InvoiceItem {
     description: string;
@@ -19,6 +20,7 @@ interface InvoiceFormProps {
 }
 
 export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormProps) => {
+    const [phoneError, setPhoneError] = useState("");
     const [formData, setFormData] = useState({
         customerName: initialData?.customerName || "",
         customerPhone: initialData?.customerPhone || "",
@@ -93,6 +95,14 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setPhoneError("");
+
+        if (!isValidIndianMobile(formData.customerPhone)) {
+            setPhoneError("Please enter a valid Indian mobile number.");
+            // Scroll to the error or focus input if needed
+            return;
+        }
+
         onSubmit(formData);
     };
 
@@ -129,6 +139,9 @@ export const InvoiceForm = ({ initialData, onSubmit, isLoading }: InvoiceFormPro
                                 setFormData({ ...formData, customerPhone: e.target.value })
                             }
                         />
+                        {phoneError && (
+                            <p className="text-xs text-red-500 mt-1">{phoneError}</p>
+                        )}
                     </div>
                     <div className="space-y-1">
                         <label className="text-sm font-medium text-gray-700">Customer Email (Optional)</label>

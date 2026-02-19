@@ -3,6 +3,7 @@ import dbConnect from "@/lib/db";
 import Invoice from "@/models/Invoice";
 import { z } from "zod";
 import * as crypto from "crypto";
+import { INDIAN_MOBILE_REGEX } from "@/lib/validation";
 
 const invoiceItemSchema = z.object({
     description: z.string(),
@@ -13,7 +14,7 @@ const invoiceItemSchema = z.object({
 
 const createInvoiceSchema = z.object({
     customerName: z.string().min(1, "Customer name is required"),
-    customerPhone: z.string().min(10, "Valid phone number is required"),
+    customerPhone: z.string().regex(INDIAN_MOBILE_REGEX, "Invalid Indian mobile number"),
     customerEmail: z.string().email().optional().or(z.literal("")),
     customerAddress: z.string().optional(),
     items: z.array(invoiceItemSchema).min(1, "At least one item is required"),

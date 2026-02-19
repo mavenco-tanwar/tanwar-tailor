@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Contact from "@/models/Contact";
 import nodemailer from "nodemailer";
+import { isValidIndianMobile } from "@/lib/validation";
 
 export async function POST(req: NextRequest) {
     try {
@@ -12,6 +13,13 @@ export async function POST(req: NextRequest) {
         if (!name || !email || !phone || !message) {
             return NextResponse.json(
                 { error: "All fields are required" },
+                { status: 400 }
+            );
+        }
+
+        if (!isValidIndianMobile(phone)) {
+            return NextResponse.json(
+                { error: "Invalid Indian mobile number" },
                 { status: 400 }
             );
         }

@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { isValidIndianMobile } from "@/lib/validation";
 
 export interface IReview extends Document {
     name: string;
@@ -19,6 +20,10 @@ const ReviewSchema: Schema = new Schema({
         type: String,
         required: [true, "Phone number is required"],
         trim: true,
+        validate: {
+            validator: isValidIndianMobile,
+            message: (props: any) => `${props.value} is not a valid Indian mobile number!`
+        }
     },
     rating: {
         type: Number,
